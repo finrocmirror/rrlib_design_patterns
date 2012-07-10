@@ -19,21 +19,27 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
 //----------------------------------------------------------------------
-/*!\file    test_singleton_pattern.cpp
+/*!\file    tLifetimeTracker.h
  *
  * \author  Tobias Foehst
  *
- * \date    2010-10-26
+ * \date    2012-01-23
+ *
+ * \brief Contains tLifetimeTracker
+ *
+ * \b tLifetimeTracker
  *
  */
 //----------------------------------------------------------------------
+#ifndef __rrlib__design_patterns__singleton__tLifetimeTracker_h__
+#define __rrlib__design_patterns__singleton__tLifetimeTracker_h__
 
 //----------------------------------------------------------------------
 // External includes (system with <>, local with "")
 //----------------------------------------------------------------------
-#include <cstdlib>
-#include <string>
-#include <iostream>
+#include <list>
+#include <memory>
+#include <algorithm>
 
 //----------------------------------------------------------------------
 // Internal includes with ""
@@ -43,101 +49,92 @@
 //----------------------------------------------------------------------
 // Debugging
 //----------------------------------------------------------------------
+#include <cassert>
 
 //----------------------------------------------------------------------
-// Namespace usage
+// Namespace declaration
 //----------------------------------------------------------------------
-using namespace rrlib::design_patterns;
+namespace rrlib
+{
+namespace design_patterns
+{
+namespace singleton
+{
 
 //----------------------------------------------------------------------
 // Forward declarations / typedefs / enums
 //----------------------------------------------------------------------
+class tLifetimeTracker;
+typedef tSingletonHolder<std::list<tLifetimeTracker *>> tLifetimeTrackerList;
 
 //----------------------------------------------------------------------
-// Const values
+// Class declaration
 //----------------------------------------------------------------------
-
-//----------------------------------------------------------------------
-// Implementation
-//----------------------------------------------------------------------
-
-
-struct tLogImplementation
+//!
+/*!
+ *
+ */
+class tLifetimeTracker
 {
-  tLogImplementation()
+
+//----------------------------------------------------------------------
+// Public methods and typedefs
+//----------------------------------------------------------------------
+public:
+
+  tLifetimeTracker(unsigned int longevity, void (*destroy_instance)())
+    : longevity(longevity),
+      destroy_instance(destroy_instance)
+  {}
+
+  ~tLifetimeTracker()
   {
-    std::cout << "Log ctor" << std::endl;
-  }
-  ~tLogImplementation()
-  {
-    std::cout << "Log dtor" << std::endl;
+    this->destroy_instance();
   }
 
-  void Print(const std::string &message) const
+  static void DestroyNextInstance()
   {
-    std::cout << "log: " << message << std::endl;
+    assert(!tLifetimeTrackerList::Instance().empty());
+    delete tLifetimeTrackerList::Instance().front();
+    tLifetimeTrackerList::Instance().pop_front();
   }
+
+  static bool SmallerFirst(const tLifetimeTracker *a, const tLifetimeTracker *b)
+  {
+    return a->longevity < b->longevity;
+  }
+
+//----------------------------------------------------------------------
+// Private fields and methods
+//----------------------------------------------------------------------
+private:
+
+  unsigned int longevity;
+  void (*destroy_instance)();
+
 };
-//typedef tSingletonHolder<tLogImplementation, singleton::PhoenixSingleton> tLog;
-//typedef tSingletonHolder<tLogImplementation, singleton::NoDestruction> tLog;
-typedef tSingletonHolder<tLogImplementation, singleton::Longevity> tLog;
-unsigned int GetLongevity(tLogImplementation *)
+
+inline void SetLongevity(unsigned int longevity, void (*destroy_instance)())
 {
-  return 2;
+  static std::mutex mutex;
+  std::unique_lock<std::mutex> lock(mutex);
+
+  std::auto_ptr<tLifetimeTracker> p(new tLifetimeTracker(longevity, destroy_instance));
+
+  auto &tracker_list = tLifetimeTrackerList::Instance();
+  auto position = std::upper_bound(tracker_list.begin(), tracker_list.end(), p.get(), tLifetimeTracker::SmallerFirst);
+  tracker_list.insert(position, p.get());
+
+  p.release();
+
+  std::atexit(&tLifetimeTracker::DestroyNextInstance);
 }
 
-struct tKeyboardImplementation
-{
-  tKeyboardImplementation()
-  {
-    std::cout << "Keyboard ctor" << std::endl;
-  }
-  ~tKeyboardImplementation()
-  {
-    std::cout << "Keyboard dtor" << std::endl;
-    tLog::Instance().Print("Keyboard destroyed.");
-  }
-
-  void Type(const std::string &message) const
-  {
-    std::cout << "keyboard: " << message << std::endl;
-  };
-};
-//typedef rrlib::design_patterns::tSingletonHolder<tKeyboardImplementation> tKeyboard;
-typedef rrlib::design_patterns::tSingletonHolder<tKeyboardImplementation, singleton::Longevity> tKeyboard;
-unsigned int GetLongevity(tKeyboardImplementation *)
-{
-  return 1;
+//----------------------------------------------------------------------
+// End of namespace declaration
+//----------------------------------------------------------------------
+}
+}
 }
 
-struct tDisplayImplementation
-{
-  tDisplayImplementation()
-  {
-    std::cout << "Display ctor" << std::endl;
-  }
-  ~tDisplayImplementation()
-  {
-    std::cout << "Display dtor" << std::endl;
-    tLog::Instance().Print("Display destroyed.");
-  }
-
-  void Show(const std::string &message) const
-  {
-    std::cout << "display: " << message << std::endl;
-  };
-};
-//typedef rrlib::design_patterns::tSingletonHolder<tDisplayImplementation> tDisplay;
-typedef rrlib::design_patterns::tSingletonHolder<tDisplayImplementation, singleton::Longevity> tDisplay;
-unsigned int GetLongevity(tDisplayImplementation *)
-{
-  return 1;
-}
-
-int main(int argc, char **argv)
-{
-  tKeyboard::Instance().Type("foo");
-  tDisplay::Instance().Show("bar");
-
-  return EXIT_SUCCESS;
-}
+#endif

@@ -2,46 +2,13 @@
 <!DOCTYPE targets PUBLIC "-//RRLIB//DTD make 1.0" "http://rrlib.org/xml/1.0/make.dtd">
 <targets>
 
-  <rrlib name="util"
-         libs="boost_iostreams">
+  <rrlib name="design_patterns">
     <sources>
-      join.h
-      sFileIOUtils.cpp
-      sStringUtils.cpp
-      tAutoRegister.h
-      tDoubleDispatcher.h
-      tTime.cpp
-      tTypeList.h
-      type_list/*
-      tFPSComputer.cpp
-    </sources>
-  </rrlib>
-
-  <rrlib name="util_unit_tests"
-        libs="cppunit">
-    <sources>
-      tUnitTestSuite.cpp
-    </sources>
-  </rrlib>
-
-  <rrlib name="util_patterns">
-    <sources>
-      patterns/*
-      patterns/command/**
-      patterns/factory/**
-      patterns/singleton/**
-    </sources>
-  </rrlib>
-
-  <rrlib name="util_fstream">
-    <sources>
-      fstream/*
-    </sources>
-  </rrlib>
-
-  <rrlib name="util_variadic_templates">
-    <sources>
-      variadic_templates.h
+      command/**
+      factory/**
+      singleton/**
+      double_dispatch/**
+      *.h
     </sources>
   </rrlib>
 
@@ -57,21 +24,9 @@
     </sources>
   </testprogram>
 
-  <testprogram name="final_class_pattern">
-    <sources>
-      test/test_final_class_pattern.cpp
-    </sources>
-  </testprogram>
- 
   <testprogram name="singleton_pattern">
     <sources>
       test/test_singleton_pattern.cpp
-    </sources>
-  </testprogram>
-
-  <testprogram name="type_list">
-    <sources>
-      test/test_type_list.cpp
     </sources>
   </testprogram>
 

@@ -37,7 +37,7 @@
 //----------------------------------------------------------------------
 // Internal includes with ""
 //----------------------------------------------------------------------
-#include "rrlib/util/tDoubleDispatcher.h"
+#include "rrlib/design_patterns/double_dispatch.h"
 
 //----------------------------------------------------------------------
 // Debugging
@@ -46,7 +46,7 @@
 //----------------------------------------------------------------------
 // Namespace usage
 //----------------------------------------------------------------------
-using namespace rrlib::util;
+using namespace rrlib::design_patterns;
 
 //----------------------------------------------------------------------
 // Forward declarations / typedefs / enums
@@ -127,7 +127,7 @@ struct tBinaryAction
 
 void PerformAction(const Base &left, const Base &right)
 {
-  tDoubleDispatcher<tBinaryAction, const Base, tTypeList<const A, const B, const C, const D>>::Execute(left, right);
+  tDoubleDispatcher<tBinaryAction, const Base, rrlib::util::tTypeList<const A, const B, const C, const D>>::Execute(left, right);
 }
 
 int main(int argc, char **argv)

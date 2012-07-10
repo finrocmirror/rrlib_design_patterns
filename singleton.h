@@ -19,125 +19,68 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
 //----------------------------------------------------------------------
-/*!\file    test_singleton_pattern.cpp
+/*!\file    singleton.h
  *
  * \author  Tobias Foehst
  *
  * \date    2010-10-26
  *
+ * \brief Contains singleton
+ *
+ * \b singleton
+ *
  */
 //----------------------------------------------------------------------
+#ifndef __rrlib__design_patterns__singleton_h__
+#define __rrlib__design_patterns__singleton_h__
 
 //----------------------------------------------------------------------
 // External includes (system with <>, local with "")
 //----------------------------------------------------------------------
-#include <cstdlib>
-#include <string>
-#include <iostream>
 
 //----------------------------------------------------------------------
 // Internal includes with ""
 //----------------------------------------------------------------------
-#include "rrlib/design_patterns/singleton.h"
+
+// default policies
+#include "rrlib/design_patterns/singleton/policies/creation/CreateUsingNew.h"
+#include "rrlib/design_patterns/singleton/policies/lifetime/DefaultLifetime.h"
+
+#include "rrlib/design_patterns/singleton/tSingletonHolder.h"
+
+// creation policies
+#include "rrlib/design_patterns/singleton/policies/creation/CreateStatic.h"
+#include "rrlib/design_patterns/singleton/policies/creation/CreateUsingMalloc.h"
+
+// lifetime policies
+#include "rrlib/design_patterns/singleton/policies/lifetime/PhoenixSingleton.h"
+#include "rrlib/design_patterns/singleton/policies/lifetime/NoDestruction.h"
+#include "rrlib/design_patterns/singleton/policies/lifetime/Longevity.h"
 
 //----------------------------------------------------------------------
 // Debugging
 //----------------------------------------------------------------------
 
 //----------------------------------------------------------------------
-// Namespace usage
+// Namespace declaration
 //----------------------------------------------------------------------
-using namespace rrlib::design_patterns;
+namespace rrlib
+{
+namespace design_patterns
+{
 
 //----------------------------------------------------------------------
 // Forward declarations / typedefs / enums
 //----------------------------------------------------------------------
 
 //----------------------------------------------------------------------
-// Const values
+// Function declaration
 //----------------------------------------------------------------------
 
 //----------------------------------------------------------------------
-// Implementation
+// End of namespace declaration
 //----------------------------------------------------------------------
-
-
-struct tLogImplementation
-{
-  tLogImplementation()
-  {
-    std::cout << "Log ctor" << std::endl;
-  }
-  ~tLogImplementation()
-  {
-    std::cout << "Log dtor" << std::endl;
-  }
-
-  void Print(const std::string &message) const
-  {
-    std::cout << "log: " << message << std::endl;
-  }
-};
-//typedef tSingletonHolder<tLogImplementation, singleton::PhoenixSingleton> tLog;
-//typedef tSingletonHolder<tLogImplementation, singleton::NoDestruction> tLog;
-typedef tSingletonHolder<tLogImplementation, singleton::Longevity> tLog;
-unsigned int GetLongevity(tLogImplementation *)
-{
-  return 2;
+}
 }
 
-struct tKeyboardImplementation
-{
-  tKeyboardImplementation()
-  {
-    std::cout << "Keyboard ctor" << std::endl;
-  }
-  ~tKeyboardImplementation()
-  {
-    std::cout << "Keyboard dtor" << std::endl;
-    tLog::Instance().Print("Keyboard destroyed.");
-  }
-
-  void Type(const std::string &message) const
-  {
-    std::cout << "keyboard: " << message << std::endl;
-  };
-};
-//typedef rrlib::design_patterns::tSingletonHolder<tKeyboardImplementation> tKeyboard;
-typedef rrlib::design_patterns::tSingletonHolder<tKeyboardImplementation, singleton::Longevity> tKeyboard;
-unsigned int GetLongevity(tKeyboardImplementation *)
-{
-  return 1;
-}
-
-struct tDisplayImplementation
-{
-  tDisplayImplementation()
-  {
-    std::cout << "Display ctor" << std::endl;
-  }
-  ~tDisplayImplementation()
-  {
-    std::cout << "Display dtor" << std::endl;
-    tLog::Instance().Print("Display destroyed.");
-  }
-
-  void Show(const std::string &message) const
-  {
-    std::cout << "display: " << message << std::endl;
-  };
-};
-//typedef rrlib::design_patterns::tSingletonHolder<tDisplayImplementation> tDisplay;
-typedef rrlib::design_patterns::tSingletonHolder<tDisplayImplementation, singleton::Longevity> tDisplay;
-unsigned int GetLongevity(tDisplayImplementation *)
-{
-  return 1;
-}
-
-int main(int argc, char **argv)
-{
-  tKeyboard::Instance().Type("foo");
-  tDisplay::Instance().Show("bar");
-
-  return EXIT_SUCCESS;
-}
+#endif

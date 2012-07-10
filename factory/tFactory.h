@@ -19,125 +19,108 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
 //----------------------------------------------------------------------
-/*!\file    test_singleton_pattern.cpp
+/*!\file    tFactory.h
  *
  * \author  Tobias Foehst
  *
- * \date    2010-10-26
+ * \date    2011-01-07
+ *
+ * \brief Contains tFactory
+ *
+ * \b tFactory
  *
  */
 //----------------------------------------------------------------------
+#ifndef __rrlib__design_patterns__factory__tFactory_h__
+#define __rrlib__design_patterns__factory__tFactory_h__
 
 //----------------------------------------------------------------------
 // External includes (system with <>, local with "")
 //----------------------------------------------------------------------
-#include <cstdlib>
-#include <string>
-#include <iostream>
+#include <map>
 
 //----------------------------------------------------------------------
 // Internal includes with ""
 //----------------------------------------------------------------------
-#include "rrlib/design_patterns/singleton.h"
+#include "rrlib/design_patterns/command.h"
 
 //----------------------------------------------------------------------
 // Debugging
 //----------------------------------------------------------------------
+#include <cassert>
 
 //----------------------------------------------------------------------
-// Namespace usage
+// Namespace declaration
 //----------------------------------------------------------------------
-using namespace rrlib::design_patterns;
+namespace rrlib
+{
+namespace design_patterns
+{
 
 //----------------------------------------------------------------------
 // Forward declarations / typedefs / enums
 //----------------------------------------------------------------------
 
 //----------------------------------------------------------------------
-// Const values
+// Class declaration
 //----------------------------------------------------------------------
+//!
+/*!
+ *
+ */
+template <
+typename TAbstractProduct,
+         typename TIdentifier,
+         typename TProductCreator = tFunctor<TAbstractProduct *>,
+         template <typename TAbstractProduct, typename TIdentifier> class TUnknownKeyPolicy = factory::ThrowException
+         >
+class tFactory
+{
 
 //----------------------------------------------------------------------
-// Implementation
+// Public methods and typedefs
 //----------------------------------------------------------------------
+public:
 
-
-struct tLogImplementation
-{
-  tLogImplementation()
+  const bool Register(const TIdentifier &id, const TProductCreator &creator)
   {
-    std::cout << "Log ctor" << std::endl;
-  }
-  ~tLogImplementation()
-  {
-    std::cout << "Log dtor" << std::endl;
+    return this->id_to_creator_map.insert(std::make_pair(id, creator)).second;
   }
 
-  void Print(const std::string &message) const
+  template <typename TProduct>
+  const bool Register(const TIdentifier &id)
   {
-    std::cout << "log: " << message << std::endl;
+    return this->Register(id, &factory::DefaultNewCreator<TProduct>);
   }
+
+  const bool Unregister(const TIdentifier &id)
+  {
+    return this->id_to_creator_map.erase(id) == 1;
+  }
+
+  TAbstractProduct *Create(const TIdentifier &id) const
+  {
+    typename std::map<TIdentifier, TProductCreator>::const_iterator it = this->id_to_creator_map.find(id);
+    if (it != this->id_to_creator_map.end())
+    {
+      return (it->second)();
+    }
+    return TUnknownKeyPolicy<TAbstractProduct, TIdentifier>::OnUnknownType(id);
+  }
+
+//----------------------------------------------------------------------
+// Private fields and methods
+//----------------------------------------------------------------------
+private:
+
+  std::map<TIdentifier, TProductCreator> id_to_creator_map;
+
 };
-//typedef tSingletonHolder<tLogImplementation, singleton::PhoenixSingleton> tLog;
-//typedef tSingletonHolder<tLogImplementation, singleton::NoDestruction> tLog;
-typedef tSingletonHolder<tLogImplementation, singleton::Longevity> tLog;
-unsigned int GetLongevity(tLogImplementation *)
-{
-  return 2;
+
+//----------------------------------------------------------------------
+// End of namespace declaration
+//----------------------------------------------------------------------
+}
 }
 
-struct tKeyboardImplementation
-{
-  tKeyboardImplementation()
-  {
-    std::cout << "Keyboard ctor" << std::endl;
-  }
-  ~tKeyboardImplementation()
-  {
-    std::cout << "Keyboard dtor" << std::endl;
-    tLog::Instance().Print("Keyboard destroyed.");
-  }
-
-  void Type(const std::string &message) const
-  {
-    std::cout << "keyboard: " << message << std::endl;
-  };
-};
-//typedef rrlib::design_patterns::tSingletonHolder<tKeyboardImplementation> tKeyboard;
-typedef rrlib::design_patterns::tSingletonHolder<tKeyboardImplementation, singleton::Longevity> tKeyboard;
-unsigned int GetLongevity(tKeyboardImplementation *)
-{
-  return 1;
-}
-
-struct tDisplayImplementation
-{
-  tDisplayImplementation()
-  {
-    std::cout << "Display ctor" << std::endl;
-  }
-  ~tDisplayImplementation()
-  {
-    std::cout << "Display dtor" << std::endl;
-    tLog::Instance().Print("Display destroyed.");
-  }
-
-  void Show(const std::string &message) const
-  {
-    std::cout << "display: " << message << std::endl;
-  };
-};
-//typedef rrlib::design_patterns::tSingletonHolder<tDisplayImplementation> tDisplay;
-typedef rrlib::design_patterns::tSingletonHolder<tDisplayImplementation, singleton::Longevity> tDisplay;
-unsigned int GetLongevity(tDisplayImplementation *)
-{
-  return 1;
-}
-
-int main(int argc, char **argv)
-{
-  tKeyboard::Instance().Type("foo");
-  tDisplay::Instance().Show("bar");
-
-  return EXIT_SUCCESS;
-}
+#endif

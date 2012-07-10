@@ -19,125 +19,127 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
 //----------------------------------------------------------------------
-/*!\file    test_singleton_pattern.cpp
+/*!\file    tSingletonHolder.h
  *
  * \author  Tobias Foehst
  *
  * \date    2010-10-26
  *
+ * \brief Contains tSingletonHolder
+ *
+ * \b tSingletonHolder
+ *
  */
 //----------------------------------------------------------------------
+#ifndef __rrlib__design_patterns__singleton__tSingletonHolder_h__
+#define __rrlib__design_patterns__singleton__tSingletonHolder_h__
 
 //----------------------------------------------------------------------
 // External includes (system with <>, local with "")
 //----------------------------------------------------------------------
-#include <cstdlib>
-#include <string>
-#include <iostream>
+#include <boost/noncopyable.hpp>
+#include <mutex>
 
 //----------------------------------------------------------------------
 // Internal includes with ""
 //----------------------------------------------------------------------
-#include "rrlib/design_patterns/singleton.h"
 
 //----------------------------------------------------------------------
 // Debugging
 //----------------------------------------------------------------------
+#include <cassert>
 
 //----------------------------------------------------------------------
-// Namespace usage
+// Namespace declaration
 //----------------------------------------------------------------------
-using namespace rrlib::design_patterns;
+namespace rrlib
+{
+namespace design_patterns
+{
 
 //----------------------------------------------------------------------
 // Forward declarations / typedefs / enums
 //----------------------------------------------------------------------
 
 //----------------------------------------------------------------------
-// Const values
+// Class declaration
 //----------------------------------------------------------------------
+//!
+/*!
+ *
+ */
+template <
+typename T,
+         template <typename> class TLifetimePolicy = singleton::DefaultLifetime,
+         template <typename> class TCreationPolicy = singleton::CreateUsingNew
+         >
+class tSingletonHolder : public boost::noncopyable
+{
 
 //----------------------------------------------------------------------
-// Implementation
+// Public methods and typedefs
 //----------------------------------------------------------------------
+public:
 
-
-struct tLogImplementation
-{
-  tLogImplementation()
+  static T &Instance()
   {
-    std::cout << "Log ctor" << std::endl;
-  }
-  ~tLogImplementation()
-  {
-    std::cout << "Log dtor" << std::endl;
+    if (!tSingletonHolder::InstancePointer())
+    {
+      tSingletonHolder::CreateInstance();
+    }
+    return *tSingletonHolder::InstancePointer();
   }
 
-  void Print(const std::string &message) const
+//----------------------------------------------------------------------
+// Private fields and methods
+//----------------------------------------------------------------------
+private:
+
+  tSingletonHolder();
+
+  static void CreateInstance()
   {
-    std::cout << "log: " << message << std::endl;
+    static std::mutex mutex;
+    std::unique_lock<std::mutex> lock(mutex);
+
+    if (!tSingletonHolder::InstancePointer())
+    {
+      if (tSingletonHolder::Destroyed())
+      {
+        TLifetimePolicy<T>::OnDeadReference();
+        tSingletonHolder::Destroyed() = false;
+      }
+      tSingletonHolder::InstancePointer() = TCreationPolicy<T>::Create();
+      TLifetimePolicy<T>::ScheduleDestruction(tSingletonHolder::InstancePointer(), &tSingletonHolder::DestroyInstance);
+    }
   }
+
+  static void DestroyInstance()
+  {
+    assert(!tSingletonHolder::Destroyed());
+    TCreationPolicy<T>::Destroy(tSingletonHolder::InstancePointer());
+    tSingletonHolder::InstancePointer() = 0;
+    tSingletonHolder::Destroyed() = true;
+  }
+
+  static T *&InstancePointer()
+  {
+    static T *instance = 0;
+    return instance;
+  }
+
+  static bool &Destroyed()
+  {
+    static bool destroyed = false;
+    return destroyed;
+  }
+
 };
-//typedef tSingletonHolder<tLogImplementation, singleton::PhoenixSingleton> tLog;
-//typedef tSingletonHolder<tLogImplementation, singleton::NoDestruction> tLog;
-typedef tSingletonHolder<tLogImplementation, singleton::Longevity> tLog;
-unsigned int GetLongevity(tLogImplementation *)
-{
-  return 2;
+
+//----------------------------------------------------------------------
+// End of namespace declaration
+//----------------------------------------------------------------------
+}
 }
 
-struct tKeyboardImplementation
-{
-  tKeyboardImplementation()
-  {
-    std::cout << "Keyboard ctor" << std::endl;
-  }
-  ~tKeyboardImplementation()
-  {
-    std::cout << "Keyboard dtor" << std::endl;
-    tLog::Instance().Print("Keyboard destroyed.");
-  }
-
-  void Type(const std::string &message) const
-  {
-    std::cout << "keyboard: " << message << std::endl;
-  };
-};
-//typedef rrlib::design_patterns::tSingletonHolder<tKeyboardImplementation> tKeyboard;
-typedef rrlib::design_patterns::tSingletonHolder<tKeyboardImplementation, singleton::Longevity> tKeyboard;
-unsigned int GetLongevity(tKeyboardImplementation *)
-{
-  return 1;
-}
-
-struct tDisplayImplementation
-{
-  tDisplayImplementation()
-  {
-    std::cout << "Display ctor" << std::endl;
-  }
-  ~tDisplayImplementation()
-  {
-    std::cout << "Display dtor" << std::endl;
-    tLog::Instance().Print("Display destroyed.");
-  }
-
-  void Show(const std::string &message) const
-  {
-    std::cout << "display: " << message << std::endl;
-  };
-};
-//typedef rrlib::design_patterns::tSingletonHolder<tDisplayImplementation> tDisplay;
-typedef rrlib::design_patterns::tSingletonHolder<tDisplayImplementation, singleton::Longevity> tDisplay;
-unsigned int GetLongevity(tDisplayImplementation *)
-{
-  return 1;
-}
-
-int main(int argc, char **argv)
-{
-  tKeyboard::Instance().Type("foo");
-  tDisplay::Instance().Show("bar");
-
-  return EXIT_SUCCESS;
-}
+#endif

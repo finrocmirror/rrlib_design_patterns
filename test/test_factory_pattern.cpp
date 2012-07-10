@@ -38,8 +38,8 @@
 //----------------------------------------------------------------------
 // Internal includes with ""
 //----------------------------------------------------------------------
-#include "rrlib/util/patterns/factory.h"
-#include "rrlib/util/patterns/singleton.h"
+#include "rrlib/design_patterns/factory.h"
+#include "rrlib/design_patterns/singleton.h"
 
 //----------------------------------------------------------------------
 // Debugging
@@ -48,7 +48,7 @@
 //----------------------------------------------------------------------
 // Namespace usage
 //----------------------------------------------------------------------
-using namespace rrlib::util;
+using namespace rrlib::design_patterns;
 
 //----------------------------------------------------------------------
 // Forward declarations / typedefs / enums

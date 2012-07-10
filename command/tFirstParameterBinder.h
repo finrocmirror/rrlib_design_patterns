@@ -19,125 +19,85 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
 //----------------------------------------------------------------------
-/*!\file    test_singleton_pattern.cpp
+/*!\file    tFirstParameterBinder.h
  *
  * \author  Tobias Foehst
  *
- * \date    2010-10-26
+ * \date    2010-10-24
+ *
+ * \brief Contains tFirstParameterBinder
+ *
+ * \b tFirstParameterBinder
  *
  */
 //----------------------------------------------------------------------
+#ifndef __rrlib__design_patterns__command__tFirstParameterBinder_h__
+#define __rrlib__design_patterns__command__tFirstParameterBinder_h__
 
+#include "rrlib/design_patterns/command/tFunctorHandlerBase.h"
 //----------------------------------------------------------------------
 // External includes (system with <>, local with "")
 //----------------------------------------------------------------------
-#include <cstdlib>
-#include <string>
-#include <iostream>
 
 //----------------------------------------------------------------------
 // Internal includes with ""
 //----------------------------------------------------------------------
-#include "rrlib/design_patterns/singleton.h"
 
 //----------------------------------------------------------------------
 // Debugging
 //----------------------------------------------------------------------
 
 //----------------------------------------------------------------------
-// Namespace usage
+// Namespace declaration
 //----------------------------------------------------------------------
-using namespace rrlib::design_patterns;
+namespace rrlib
+{
+namespace design_patterns
+{
 
 //----------------------------------------------------------------------
 // Forward declarations / typedefs / enums
 //----------------------------------------------------------------------
 
 //----------------------------------------------------------------------
-// Const values
+// Class declaration
 //----------------------------------------------------------------------
+//!
+/*!
+ *
+ */
+template <typename TReturn, typename TFirstParameter, typename ... TParameterRest>
+class tFirstParameterBinder : public tFunctorHandlerBase<TReturn, TParameterRest...>
+{
 
 //----------------------------------------------------------------------
-// Implementation
+// Public methods and typedefs
 //----------------------------------------------------------------------
+public:
 
+  tFirstParameterBinder(const tFunctor<TReturn, TFirstParameter, TParameterRest...> &functor, TFirstParameter bound_parameter)
+    : functor(functor),
+      bound_parameter(bound_parameter)
+  {}
 
-struct tLogImplementation
-{
-  tLogImplementation()
+  TReturn operator()(TParameterRest... parameters)
   {
-    std::cout << "Log ctor" << std::endl;
-  }
-  ~tLogImplementation()
-  {
-    std::cout << "Log dtor" << std::endl;
+    return this->functor(bound_parameter, parameters...);
   }
 
-  void Print(const std::string &message) const
-  {
-    std::cout << "log: " << message << std::endl;
-  }
+//----------------------------------------------------------------------
+// Private fields and methods
+//----------------------------------------------------------------------
+private:
+
+  tFunctor<TReturn, TFirstParameter, TParameterRest...> functor;
+  TFirstParameter bound_parameter;
 };
-//typedef tSingletonHolder<tLogImplementation, singleton::PhoenixSingleton> tLog;
-//typedef tSingletonHolder<tLogImplementation, singleton::NoDestruction> tLog;
-typedef tSingletonHolder<tLogImplementation, singleton::Longevity> tLog;
-unsigned int GetLongevity(tLogImplementation *)
-{
-  return 2;
+
+//----------------------------------------------------------------------
+// End of namespace declaration
+//----------------------------------------------------------------------
+}
 }
 
-struct tKeyboardImplementation
-{
-  tKeyboardImplementation()
-  {
-    std::cout << "Keyboard ctor" << std::endl;
-  }
-  ~tKeyboardImplementation()
-  {
-    std::cout << "Keyboard dtor" << std::endl;
-    tLog::Instance().Print("Keyboard destroyed.");
-  }
-
-  void Type(const std::string &message) const
-  {
-    std::cout << "keyboard: " << message << std::endl;
-  };
-};
-//typedef rrlib::design_patterns::tSingletonHolder<tKeyboardImplementation> tKeyboard;
-typedef rrlib::design_patterns::tSingletonHolder<tKeyboardImplementation, singleton::Longevity> tKeyboard;
-unsigned int GetLongevity(tKeyboardImplementation *)
-{
-  return 1;
-}
-
-struct tDisplayImplementation
-{
-  tDisplayImplementation()
-  {
-    std::cout << "Display ctor" << std::endl;
-  }
-  ~tDisplayImplementation()
-  {
-    std::cout << "Display dtor" << std::endl;
-    tLog::Instance().Print("Display destroyed.");
-  }
-
-  void Show(const std::string &message) const
-  {
-    std::cout << "display: " << message << std::endl;
-  };
-};
-//typedef rrlib::design_patterns::tSingletonHolder<tDisplayImplementation> tDisplay;
-typedef rrlib::design_patterns::tSingletonHolder<tDisplayImplementation, singleton::Longevity> tDisplay;
-unsigned int GetLongevity(tDisplayImplementation *)
-{
-  return 1;
-}
-
-int main(int argc, char **argv)
-{
-  tKeyboard::Instance().Type("foo");
-  tDisplay::Instance().Show("bar");
-
-  return EXIT_SUCCESS;
-}
+#endif
