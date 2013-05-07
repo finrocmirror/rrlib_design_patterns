@@ -19,13 +19,13 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
 //----------------------------------------------------------------------
-/*!\file    DefaultLifetime.h
+/*!\file    rrlib/design_patterns/singleton/policies/lifetime/DefaultLifetime.h
  *
  * \author  Tobias Foehst
  *
  * \date    2010-10-26
  *
- * \brief Contains DefaultLifetime
+ * \brief   Contains DefaultLifetime
  *
  * \b DefaultLifetime
  *

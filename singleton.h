@@ -19,13 +19,13 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
 //----------------------------------------------------------------------
-/*!\file    singleton.h
+/*!\file    rrlib/design_patterns/singleton.h
  *
  * \author  Tobias Foehst
  *
  * \date    2010-10-26
  *
- * \brief Contains singleton
+ * \brief   Contains singleton
  *
  * \b singleton
  *

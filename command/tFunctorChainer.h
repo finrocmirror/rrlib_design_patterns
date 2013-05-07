@@ -19,13 +19,13 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
 //----------------------------------------------------------------------
-/*!\file    tFunctorChainer.h
+/*!\file    rrlib/design_patterns/command/tFunctorChainer.h
  *
  * \author  Tobias Foehst
  *
  * \date    2010-10-24
  *
- * \brief Contains tFunctorChainer
+ * \brief   Contains tFunctorChainer
  *
  * \b tFunctorChainer
  *

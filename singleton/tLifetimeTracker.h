@@ -19,13 +19,13 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
 //----------------------------------------------------------------------
-/*!\file    tLifetimeTracker.h
+/*!\file    rrlib/design_patterns/singleton/tLifetimeTracker.h
  *
  * \author  Tobias Foehst
  *
  * \date    2012-01-23
  *
- * \brief Contains tLifetimeTracker
+ * \brief   Contains tLifetimeTracker
  *
  * \b tLifetimeTracker
  *

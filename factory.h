@@ -19,13 +19,13 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
 //----------------------------------------------------------------------
-/*!\file    factory.h
+/*!\file    rrlib/design_patterns/factory.h
  *
  * \author  Tobias Foehst
  *
  * \date    2011-01-07
  *
- * \brief Contains factory
+ * \brief   Contains factory
  *
  * \b factory
  *

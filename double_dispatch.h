@@ -19,13 +19,13 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
 //----------------------------------------------------------------------
-/*!\file    double_dispatch.h
+/*!\file    rrlib/design_patterns/double_dispatch.h
  *
  * \author  Tobias Foehst
  *
  * \date    2012-07-10
  *
- * \brief Contains double_dispatch
+ * \brief   Contains double_dispatch
  *
  * \b double_dispatch
  *

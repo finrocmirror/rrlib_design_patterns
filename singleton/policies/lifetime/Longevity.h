@@ -19,13 +19,13 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
 //----------------------------------------------------------------------
-/*!\file    Longevity.h
+/*!\file    rrlib/design_patterns/singleton/policies/lifetime/Longevity.h
  *
  * \author  Tobias Foehst
  *
  * \date    2012-01-23
  *
- * \brief Contains Longevity
+ * \brief   Contains Longevity
  *
  * \b Longevity
  *

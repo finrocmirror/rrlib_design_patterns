@@ -19,13 +19,13 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
 //----------------------------------------------------------------------
-/*!\file    ReturnNullptr.h
+/*!\file    rrlib/design_patterns/factory/policies/error/ReturnNullptr.h
  *
  * \author  Tobias Foehst
  *
  * \date    2011-08-18
  *
- * \brief Contains ReturnNullptr
+ * \brief   Contains ReturnNullptr
  *
  * \b ReturnNullptr
  *

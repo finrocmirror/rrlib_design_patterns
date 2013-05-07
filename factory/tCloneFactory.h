@@ -19,13 +19,13 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
 //----------------------------------------------------------------------
-/*!\file    tCloneFactory.h
+/*!\file    rrlib/design_patterns/factory/tCloneFactory.h
  *
  * \author  Tobias Foehst
  *
  * \date    2011-01-07
  *
- * \brief Contains tCloneFactory
+ * \brief   Contains tCloneFactory
  *
  * \b tCloneFactory
  *

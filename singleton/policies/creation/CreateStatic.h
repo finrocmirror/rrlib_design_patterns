@@ -19,13 +19,13 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
 //----------------------------------------------------------------------
-/*!\file    CreateStatic.h
+/*!\file    rrlib/design_patterns/singleton/policies/creation/CreateStatic.h
  *
  * \author  Tobias Foehst
  *
  * \date    2010-10-26
  *
- * \brief Contains CreateStatic
+ * \brief   Contains CreateStatic
  *
  * \b CreateStatic
  *

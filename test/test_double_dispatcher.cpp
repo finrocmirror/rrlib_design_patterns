@@ -19,7 +19,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
 //----------------------------------------------------------------------
-/*!\file    test_double_dispatch_pattern.cpp
+/*!\file    rrlib/design_patterns/test/test_double_dispatcher.cpp
  *
  * \author  Tobias Foehst
  *

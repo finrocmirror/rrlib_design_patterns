@@ -19,13 +19,13 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
 //----------------------------------------------------------------------
-/*!\file    tFunctorHandler.h
+/*!\file    rrlib/design_patterns/command/tFunctorHandler.h
  *
  * \author  Tobias Foehst
  *
  * \date    2010-10-24
  *
- * \brief Contains tFunctorHandler
+ * \brief   Contains tFunctorHandler
  *
  * \b tFunctorHandler
  *
