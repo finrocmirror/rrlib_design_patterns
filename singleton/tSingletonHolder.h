@@ -37,7 +37,7 @@
 //----------------------------------------------------------------------
 // External includes (system with <>, local with "")
 //----------------------------------------------------------------------
-#include <boost/noncopyable.hpp>
+#include "rrlib/util/tNoncopyable.h"
 #include <mutex>
 
 //----------------------------------------------------------------------
@@ -73,7 +73,7 @@ typename T,
          template <typename> class TLifetimePolicy = singleton::DefaultLifetime,
          template <typename> class TCreationPolicy = singleton::CreateUsingNew
          >
-class tSingletonHolder : public boost::noncopyable
+class tSingletonHolder : private rrlib::util::tNoncopyable
 {
 
 //----------------------------------------------------------------------
