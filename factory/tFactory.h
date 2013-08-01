@@ -82,6 +82,9 @@ class tFactory
 //----------------------------------------------------------------------
 public:
 
+  virtual ~tFactory()
+  {};
+
   const bool Register(const TIdentifier &id, const TProductCreator &product_creator)
   {
     return this->id_to_creator_map.insert(std::make_pair(id, product_creator)).second;
