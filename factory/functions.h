@@ -37,7 +37,6 @@
 //----------------------------------------------------------------------
 // External includes (system with <>, local with "")
 //----------------------------------------------------------------------
-#include <map>
 
 //----------------------------------------------------------------------
 // Internal includes with ""
@@ -65,16 +64,16 @@ namespace factory
 //----------------------------------------------------------------------
 // Function declaration
 //----------------------------------------------------------------------
-template <typename T>
-T *DefaultNewCreator()
+template <typename TProduct, typename ... TArguments>
+TProduct *DefaultNewCreator(TArguments ... arguments)
 {
-  return new T;
+  return new TProduct(arguments...);
 }
 
-template <typename T>
-T *DefaultCopyCloner(const T &source)
+template <typename TProduct>
+TProduct *DefaultCopyCloner(const TProduct &source)
 {
-  return new T(source);
+  return new TProduct(source);
 }
 
 //----------------------------------------------------------------------

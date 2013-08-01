@@ -34,16 +34,16 @@
 #ifndef __rrlib__design_patterns__factory__tCloneFactory_h__
 #define __rrlib__design_patterns__factory__tCloneFactory_h__
 
+#include "rrlib/design_patterns/factory/tFactory.h"
+
 //----------------------------------------------------------------------
 // External includes (system with <>, local with "")
 //----------------------------------------------------------------------
-#include <map>
 #include <typeinfo>
 
 //----------------------------------------------------------------------
 // Internal includes with ""
 //----------------------------------------------------------------------
-#include "rrlib/design_patterns/command.h"
 
 //----------------------------------------------------------------------
 // Debugging
@@ -65,73 +65,62 @@ namespace design_patterns
 //----------------------------------------------------------------------
 // Class declaration
 //----------------------------------------------------------------------
+
+namespace
+{
+
+//!
+/*!
+ *
+ */
+template <typename TAbstractProduct>
+class tTypeInfoWrapper
+{
+  const std::type_info &type;
+public:
+  tTypeInfoWrapper(const TAbstractProduct &type) : type(typeid(type)) {}
+  tTypeInfoWrapper(const TAbstractProduct *type) : type(typeid(*type)) {}
+  const bool operator < (const tTypeInfoWrapper &other) const
+  {
+    return other.type.before(this->type);
+  }
+};
+
+}
+
+
 //!
 /*!
  *
  */
 template <
 typename TAbstractProduct,
-         typename TProductCreator = tFunctor<TAbstractProduct *, const TAbstractProduct &>,
+         typename TProductCreator = std::function<TAbstractProduct *(const TAbstractProduct &)>,
          template <typename TAbstractProduct, typename TIdentifier> class TUnknownKeyPolicy = factory::ThrowException
          >
-class tCloneFactory
+class tCloneFactory : public tFactory<TAbstractProduct, tTypeInfoWrapper<TAbstractProduct>, TProductCreator, TUnknownKeyPolicy>
 {
 
-  class tTypeInfoWrapper
-  {
-    const std::type_info &type;
-  public:
-    tTypeInfoWrapper(const TAbstractProduct &type) : type(typeid(type)) {}
-    tTypeInfoWrapper(const TAbstractProduct *type) : type(typeid(*type)) {}
-    const bool operator < (const tTypeInfoWrapper &other) const
-    {
-      return other.type.before(this->type);
-    }
-  };
+  typedef design_patterns::tFactory<TAbstractProduct, tTypeInfoWrapper<TAbstractProduct>, TProductCreator, TUnknownKeyPolicy> tFactory;
+  typedef tTypeInfoWrapper<TAbstractProduct> tIdentifier;
 
 //----------------------------------------------------------------------
 // Public methods and typedefs
 //----------------------------------------------------------------------
 public:
 
-  const bool Register(const tTypeInfoWrapper &id, const TProductCreator &creator)
-  {
-    return this->id_to_creator_map.insert(std::make_pair(id, creator)).second;
-  }
+  using tFactory::Register;
 
   template <typename TProduct>
-  const bool Register(const tTypeInfoWrapper &id)
+  const bool Register(const tIdentifier &id)
   {
     return this->Register(id, &factory::DefaultCopyCloner<TProduct>);
   }
 
-  const bool Unregister(const tTypeInfoWrapper &id)
-  {
-    return this->id_to_creator_map.erase(id) == 1;
-  }
-
-  TAbstractProduct *Create(const TAbstractProduct *model) const
-  {
-    return this->Create(*model);
-  }
-
   TAbstractProduct *Create(const TAbstractProduct &model) const
   {
-    tTypeInfoWrapper id(model);
-    typename std::map<tTypeInfoWrapper, TProductCreator>::const_iterator it = this->id_to_creator_map.find(id);
-    if (it != this->id_to_creator_map.end())
-    {
-      return (it->second)(model);
-    }
-    return TUnknownKeyPolicy<TAbstractProduct, tTypeInfoWrapper>::OnUnknownType(id);
+    return tFactory::Create(tIdentifier(model), model);
   }
-
-//----------------------------------------------------------------------
-// Private fields and methods
-//----------------------------------------------------------------------
-private:
-
-  std::map<tTypeInfoWrapper, TProductCreator> id_to_creator_map;
 
 };
 

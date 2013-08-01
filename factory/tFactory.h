@@ -38,11 +38,11 @@
 // External includes (system with <>, local with "")
 //----------------------------------------------------------------------
 #include <map>
+#include <functional>
 
 //----------------------------------------------------------------------
 // Internal includes with ""
 //----------------------------------------------------------------------
-#include "rrlib/design_patterns/command.h"
 
 //----------------------------------------------------------------------
 // Debugging
@@ -71,7 +71,7 @@ namespace design_patterns
 template <
 typename TAbstractProduct,
          typename TIdentifier,
-         typename TProductCreator = tFunctor<TAbstractProduct *>,
+         typename TProductCreator = std::function<TAbstractProduct *()>,
          template <typename TAbstractProduct, typename TIdentifier> class TUnknownKeyPolicy = factory::ThrowException
          >
 class tFactory
@@ -82,15 +82,15 @@ class tFactory
 //----------------------------------------------------------------------
 public:
 
-  const bool Register(const TIdentifier &id, const TProductCreator &creator)
+  const bool Register(const TIdentifier &id, const TProductCreator &product_creator)
   {
-    return this->id_to_creator_map.insert(std::make_pair(id, creator)).second;
+    return this->id_to_creator_map.insert(std::make_pair(id, product_creator)).second;
   }
 
   template <typename TProduct>
   const bool Register(const TIdentifier &id)
   {
-    return this->Register(id, &factory::DefaultNewCreator<TProduct>);
+    return this->Register(id, factory::DefaultNewCreator<TProduct>);
   }
 
   const bool Unregister(const TIdentifier &id)
@@ -98,12 +98,13 @@ public:
     return this->id_to_creator_map.erase(id) == 1;
   }
 
-  TAbstractProduct *Create(const TIdentifier &id) const
+  template <typename ... TArguments>
+  TAbstractProduct *Create(const TIdentifier &id, const TArguments &... arguments) const
   {
     typename std::map<TIdentifier, TProductCreator>::const_iterator it = this->id_to_creator_map.find(id);
     if (it != this->id_to_creator_map.end())
     {
-      return (it->second)();
+      return (it->second)(arguments...);
     }
     return TUnknownKeyPolicy<TAbstractProduct, TIdentifier>::OnUnknownType(id);
   }

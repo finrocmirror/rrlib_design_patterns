@@ -147,9 +147,9 @@ int main(int argc, char **argv)
   tShapeCloneFactory::Instance().Create(*circle);
 //  tShapeCloneFactory::Instance().Create(*ellipse);
 
-  tShapeCloneFactory::Instance().Create(line);
-  tShapeCloneFactory::Instance().Create(rectangle);
-  tShapeCloneFactory::Instance().Create(circle);
+  tShapeCloneFactory::Instance().Create(*line);
+  tShapeCloneFactory::Instance().Create(*rectangle);
+  tShapeCloneFactory::Instance().Create(*circle);
 
 
 
