@@ -95,13 +95,12 @@ public:
  */
 template <
 typename TAbstractProduct,
-         typename TProductCreator = std::function<TAbstractProduct *(const TAbstractProduct &)>,
          template <typename TAbstractProduct, typename TIdentifier> class TUnknownKeyPolicy = factory::ThrowException
          >
-class tCloneFactory : public tFactory<TAbstractProduct, tTypeInfoWrapper<TAbstractProduct>, TProductCreator, TUnknownKeyPolicy>
+class tCloneFactory : public tFactory<TAbstractProduct, tTypeInfoWrapper<TAbstractProduct>, std::function<TAbstractProduct *(const TAbstractProduct &)>, TUnknownKeyPolicy>
 {
 
-  typedef design_patterns::tFactory<TAbstractProduct, tTypeInfoWrapper<TAbstractProduct>, TProductCreator, TUnknownKeyPolicy> tFactory;
+  typedef design_patterns::tFactory<TAbstractProduct, tTypeInfoWrapper<TAbstractProduct>, std::function<TAbstractProduct *(const TAbstractProduct &)>, TUnknownKeyPolicy> tFactory;
   typedef tTypeInfoWrapper<TAbstractProduct> tIdentifier;
 
 //----------------------------------------------------------------------

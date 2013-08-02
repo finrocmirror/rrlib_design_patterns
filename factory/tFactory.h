@@ -72,7 +72,7 @@ template <
 typename TAbstractProduct,
          typename TIdentifier,
          typename TProductCreator = std::function<TAbstractProduct *()>,
-         template <typename TAbstractProduct, typename TIdentifier> class TUnknownKeyPolicy = factory::ThrowException
+         template <typename, typename> class TUnknownKeyPolicy = factory::ThrowException
          >
 class tFactory
 {
@@ -93,7 +93,7 @@ public:
   template <typename TProduct>
   const bool Register(const TIdentifier &id)
   {
-    return this->Register(id, factory::DefaultNewCreator<TProduct>);
+    return this->Register(id, factory::DefaultNewCreator<TProduct>());
   }
 
   const bool Unregister(const TIdentifier &id)

@@ -138,9 +138,9 @@ int main(int argc, char **argv)
 
   std::cout << "Testing clone factory" << std::endl;
 
-  tShapeCloneFactory::Instance().Register(*line, &CloneLine);
-  tShapeCloneFactory::Instance().Register(rectangle, &CloneRectangle);
-  tShapeCloneFactory::Instance().Register(*circle, &CloneCircle);
+  tShapeCloneFactory::Instance().Register(*line, CloneLine);
+  tShapeCloneFactory::Instance().Register(rectangle, CloneRectangle);
+  tShapeCloneFactory::Instance().Register(*circle, CloneCircle);
 
   tShapeCloneFactory::Instance().Create(*line);
   tShapeCloneFactory::Instance().Create(*rectangle);

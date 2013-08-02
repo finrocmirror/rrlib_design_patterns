@@ -64,11 +64,15 @@ namespace factory
 //----------------------------------------------------------------------
 // Function declaration
 //----------------------------------------------------------------------
-template <typename TProduct, typename ... TArguments>
-TProduct *DefaultNewCreator(TArguments ... arguments)
+template <typename TProduct>
+struct DefaultNewCreator
 {
-  return new TProduct(arguments...);
-}
+  template <typename ... TArguments>
+  TProduct *operator()(const TArguments &... arguments) const
+  {
+    return new TProduct(arguments...);
+  }
+};
 
 template <typename TProduct>
 TProduct *DefaultCopyCloner(const TProduct &source)
