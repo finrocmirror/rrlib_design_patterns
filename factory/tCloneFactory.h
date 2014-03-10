@@ -95,7 +95,7 @@ public:
  */
 template <
 typename TAbstractProduct,
-         template <typename TAbstractProduct, typename TIdentifier> class TUnknownKeyPolicy = factory::ThrowException
+         template <typename, typename> class TUnknownKeyPolicy = factory::ThrowException
          >
 class tCloneFactory : public tFactory<TAbstractProduct, tTypeInfoWrapper<TAbstractProduct>, std::function<TAbstractProduct *(const TAbstractProduct &)>, TUnknownKeyPolicy>
 {
