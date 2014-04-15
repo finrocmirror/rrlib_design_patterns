@@ -40,6 +40,7 @@
 #include <list>
 #include <memory>
 #include <algorithm>
+#include <cstdlib>
 
 //----------------------------------------------------------------------
 // Internal includes with ""
@@ -65,7 +66,7 @@ namespace singleton
 // Forward declarations / typedefs / enums
 //----------------------------------------------------------------------
 class tLifetimeTracker;
-typedef tSingletonHolder<std::list<tLifetimeTracker *>> tLifetimeTrackerList;
+typedef tSingletonHolder<std::list<tLifetimeTracker *>, PhoenixSingleton> tLifetimeTrackerList;
 
 //----------------------------------------------------------------------
 // Class declaration
