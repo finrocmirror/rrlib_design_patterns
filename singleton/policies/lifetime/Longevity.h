@@ -39,6 +39,8 @@
 //----------------------------------------------------------------------
 #include <stdexcept>
 
+#include "rrlib/util/tTraceableException.h"
+
 //----------------------------------------------------------------------
 // Internal includes with ""
 //----------------------------------------------------------------------
@@ -79,7 +81,7 @@ struct Longevity
   }
   static void OnDeadReference()
   {
-    throw std::logic_error("Dead reference detected!");
+    throw util::tTraceableException<std::logic_error>("Dead reference detected!");
   }
 };
 
