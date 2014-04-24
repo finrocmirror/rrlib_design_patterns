@@ -19,7 +19,7 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 //----------------------------------------------------------------------
-/*!\file    rrlib/design_patterns/test/test_command_pattern.cpp
+/*!\file    rrlib/design_patterns/examples/command_pattern.cpp
  *
  * \author  Tobias Foehst
  *
@@ -36,10 +36,11 @@
 #include <iostream>
 #include <vector>
 
+#include "rrlib/design_patterns/command.h"
+
 //----------------------------------------------------------------------
 // Internal includes with ""
 //----------------------------------------------------------------------
-#include "rrlib/design_patterns/command.h"
 
 //----------------------------------------------------------------------
 // Debugging

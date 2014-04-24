@@ -19,7 +19,7 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 //----------------------------------------------------------------------
-/*!\file    rrlib/design_patterns/test/test_double_dispatcher.cpp
+/*!\file    rrlib/design_patterns/examples/double_dispatcher.cpp
  *
  * \author  Tobias Foehst
  *
@@ -34,10 +34,11 @@
 #include <cstdlib>
 #include <iostream>
 
+#include "rrlib/design_patterns/double_dispatch.h"
+
 //----------------------------------------------------------------------
 // Internal includes with ""
 //----------------------------------------------------------------------
-#include "rrlib/design_patterns/double_dispatch.h"
 
 //----------------------------------------------------------------------
 // Debugging

@@ -19,7 +19,7 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
 //----------------------------------------------------------------------
-/*!\file    rrlib/design_patterns/test/test_singleton_pattern.cpp
+/*!\file    rrlib/design_patterns/examples/singleton_pattern.cpp
  *
  * \author  Tobias Foehst
  *
@@ -35,10 +35,11 @@
 #include <string>
 #include <iostream>
 
+#include "rrlib/design_patterns/singleton.h"
+
 //----------------------------------------------------------------------
 // Internal includes with ""
 //----------------------------------------------------------------------
-#include "rrlib/design_patterns/singleton.h"
 
 //----------------------------------------------------------------------
 // Debugging
