@@ -69,9 +69,9 @@ namespace design_patterns
 //----------------------------------------------------------------------
 // Implementation
 //----------------------------------------------------------------------
-class tFactoryPattern : public util::tUnitTestSuite
+class FactoryPattern : public util::tUnitTestSuite
 {
-  RRLIB_UNIT_TESTS_BEGIN_SUITE(tFactoryPattern);
+  RRLIB_UNIT_TESTS_BEGIN_SUITE(FactoryPattern);
   RRLIB_UNIT_TESTS_ADD_TEST(Factory);
   RRLIB_UNIT_TESTS_END_SUITE;
 
@@ -97,12 +97,6 @@ private:
       return "B";
     }
   };
-
-  virtual void InitializeTests()
-  {}
-
-  virtual void CleanUp()
-  {}
 
   void Factory()
   {
@@ -130,7 +124,7 @@ private:
   }
 };
 
-RRLIB_UNIT_TESTS_REGISTER_SUITE(tFactoryPattern);
+RRLIB_UNIT_TESTS_REGISTER_SUITE(FactoryPattern);
 
 //----------------------------------------------------------------------
 // End of namespace declaration
