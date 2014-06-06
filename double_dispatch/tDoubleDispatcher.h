@@ -37,7 +37,6 @@
 //----------------------------------------------------------------------
 // External includes (system with <>, local with "")
 //----------------------------------------------------------------------
-#include <boost/type.hpp>
 
 //----------------------------------------------------------------------
 // Internal includes with ""
@@ -87,7 +86,7 @@ public:
 
   static TReturn Execute(TLeftBase &left, TRightBase &right)
   {
-    DispatchLeft(left, right, boost::type<typename TLeftTypes::tUnique::tResult::tDerivedToFront::tResult>());
+    DispatchLeft(left, right, typename TLeftTypes::tUnique::tResult::tDerivedToFront::tResult());
   }
 
 //----------------------------------------------------------------------
@@ -112,29 +111,29 @@ private:
     }
   };
 
-  static TReturn DispatchLeft(TLeftBase &left, TRightBase &right, boost::type<util::type_list::tEmptyList>)
+  static TReturn DispatchLeft(TLeftBase &left, TRightBase &right, util::type_list::tEmptyList)
   {
     TExecutor::OnError(left, right);
   }
   template <typename TTypes>
-  static TReturn DispatchLeft(TLeftBase &left, TRightBase &right, boost::type<TTypes>)
+  static TReturn DispatchLeft(TLeftBase &left, TRightBase &right, TTypes)
   {
     typedef typename TTypes::tHead tHead;
     typedef typename TTypes::tTail tTail;
     if (tHead *left_dispatched = dynamic_cast<tHead *>(&left))
     {
-      return DispatchRight(*left_dispatched, right, boost::type<typename TRightTypes::tUnique::tResult::tDerivedToFront::tResult>());
+      return DispatchRight(*left_dispatched, right, typename TRightTypes::tUnique::tResult::tDerivedToFront::tResult());
     }
-    DispatchLeft(left, right, boost::type<tTail>());
+    DispatchLeft(left, right, tTail());
   }
 
   template <typename TLeft>
-  static TReturn DispatchRight(TLeft &left_dispatched, TRightBase &right, boost::type<util::type_list::tEmptyList>)
+  static TReturn DispatchRight(TLeft &left_dispatched, TRightBase &right, util::type_list::tEmptyList)
   {
     TExecutor::OnError(left_dispatched, right);
   }
   template <typename TLeft, typename TTypes>
-  static TReturn DispatchRight(TLeft &left_dispatched, TRightBase &right, boost::type<TTypes>)
+  static TReturn DispatchRight(TLeft &left_dispatched, TRightBase &right, TTypes)
   {
     typedef typename TTypes::tHead tHead;
     typedef typename TTypes::tTail tTail;
@@ -143,7 +142,7 @@ private:
       const bool cSWAP_ARGUMENTS = Tsymmetric && util::type_list::tFind<TRightTypes, tHead>::cINDEX < util::type_list::tFind<TLeftTypes, TLeft>::cINDEX;
       return tCallTrait<cSWAP_ARGUMENTS, TLeft, tHead>::Execute(left_dispatched, *right_dispatched);
     }
-    return DispatchRight(left_dispatched, right, boost::type<tTail>());
+    return DispatchRight(left_dispatched, right, tTail());
   }
 
 };
