@@ -101,6 +101,16 @@ public:
     return this->id_to_creator_map.erase(id) == 1;
   }
 
+  std::vector<TIdentifier> GetRegisteredIDs() const
+  {
+    std::vector<TIdentifier> keys;
+    for (const auto & entry : this->id_to_creator_map)
+    {
+      keys.emplace_back(entry.first);
+    }
+    return keys;
+  }
+
   template <typename ... TArguments>
   TAbstractProduct *Create(const TIdentifier &id, const TArguments &... arguments) const
   {
